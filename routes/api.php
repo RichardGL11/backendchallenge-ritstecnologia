@@ -11,3 +11,4 @@ Route::get('/user', function (Request $request) {
 Route::post('/orders', [OrderController::class,'store'])->name('order.store');
 Route::get('/orders{order}', [OrderController::class,'show'])->name('order.show');
 Route::get('/orders', [OrderController::class,'index'])->name('order.index');
+Route::delete('/orders{order}', [OrderController::class,'destroy'])->name('order.destroy');
