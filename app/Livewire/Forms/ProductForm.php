@@ -27,10 +27,10 @@ class ProductForm extends Form
     public function update()
     {
         $this->validate();
+       $this->product->name = $this->name;
+       $this->product->price = $this->price;
+       $this->product->save();
 
-        $this->product->update(
-            $this->all()
-        );
     }
     public function save()
     {

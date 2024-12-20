@@ -13,7 +13,6 @@ class CreateProduct extends Component
 
     public function save()
     {
-
         $this->form->save();
         return $this->redirect('/dashboard');
     }
