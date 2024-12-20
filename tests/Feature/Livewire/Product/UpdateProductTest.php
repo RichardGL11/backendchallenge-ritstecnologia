@@ -43,3 +43,50 @@ it('should be able to update a product', function () {
     ]);
 
 });
+
+describe('validations', function (){
+
+    beforeEach(function (){
+        $this->user = User::factory()->create();
+        $this->product = Product::factory()->create([
+            'name' => 'product',
+            'price' => 20
+        ]);
+
+    });
+
+    test('name', function ($rule, $value){
+        Livewire::actingAs($this->user)
+            ->test(UpdateProduct::class)
+            ->call('load', $this->product->id)
+            ->set('form.name', $value)
+            ->assertSet('form.name', $value)
+            ->set('form.price','1000')
+            ->assertSet('form.price', '1000')
+            ->call('update')
+            ->assertHasErrors(['form.name' => $rule]);
+
+    })->with([
+        'required' => ['required',''],
+        'min'      => ['min:3', 'aa'],
+        'max'      => ['max:255', str_repeat('a',256)],
+    ]);
+
+    test('price', function ($rule, $value){
+        Livewire::actingAs($this->user)
+            ->test(UpdateProduct::class)
+            ->call('load', $this->product->id)
+            ->set('form.name', 'qualquerum')
+            ->assertSet('form.name', 'qualquerum')
+            ->set('form.price', $value)
+            ->assertSet('form.price', $value)
+            ->call('update')
+            ->assertHasErrors(['form.price' => $rule]);
+
+    })->with([
+        'required' => ['required',''],
+        'min_digits'      => ['min_digits:1', '/'],
+        'numeric'      => ['numeric', 'aaaa'],
+    ]);
+
+});
