@@ -4,6 +4,7 @@ use App\Livewire\Product\CreateProduct;
 use App\Models\Product;
 use App\Models\User;
 use Livewire\Livewire;
+use function Pest\Laravel\actingAs;
 use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\assertDatabaseHas;
 
@@ -28,6 +29,30 @@ it('should be able to create an Product', function () {
         'name' => 'nome',
         'price' => 150
     ]);
+});
+
+
+describe('validation tests', function (){
+
+    beforeEach(function (){
+       $this->user = User::factory()->createOne();
+       actingAs($this->user);
+    });
+
+    test('name::validations', function ($rule, $value){
+
+        Livewire::test(CreateProduct::class)
+            ->set('form.name',$value)
+            ->set('form.price','150')
+            ->call('save')
+            ->assertHasErrors(['form.name' => $rule]);
+
+    })->with([
+        'required' => ['required', ''],
+        'min'      => ['min:3', 'aa'],
+        'max'      => ['max:255', str_repeat('a',256)]
+    ]);
+
 });
 
 
