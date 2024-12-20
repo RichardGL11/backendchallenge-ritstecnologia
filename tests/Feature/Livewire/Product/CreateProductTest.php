@@ -53,6 +53,20 @@ describe('validation tests', function (){
         'max'      => ['max:255', str_repeat('a',256)]
     ]);
 
+    test('price::validations', function ($rule, $value){
+
+        Livewire::test(CreateProduct::class)
+            ->set('form.name','aaaaa')
+            ->set('form.price',$value)
+            ->call('save')
+            ->assertHasErrors(['form.price' => $rule]);
+
+    })->with([
+        'required'   => ['required', ''],
+        'numeric'    => ['numeric', 'aaaaaa'],
+        'min_digits' => ['min_digits', '/']
+    ]);
+
 });
 
 

@@ -34,7 +34,9 @@ class ProductForm extends Form
     }
     public function save()
     {
+
         $this->validate();
+
 
         Product::query()->create([
             'name' => $this->name,
