@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\ListOrders;
 use App\Livewire\ListUsers;
 use Illuminate\Support\Facades\Route;
 
@@ -14,5 +15,6 @@ Route::view('profile', 'profile')
     ->name('profile');
 
 Route::get('/users', ListUsers::class)->name('users')->middleware(['auth', 'verified']);
+Route::get('/orders', ListOrders::class)->name('orders')->middleware(['auth', 'verified']);
 
 require __DIR__.'/auth.php';
