@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Order;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 
@@ -24,13 +25,14 @@ class TelegramBotMessage extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(Order $order)
     {
+
      $request =    Http::post(
             sprintf('https://api.telegram.org/bot%s/sendMessage', config('services.telegram.bot_key')),
             [
                 'chat_id' => config('services.telegram.chat_id'),
-                'text' => 'Order Created at ' . now('America/Sao_Paulo')->format('H:i'),
+                'text' => 'Order Created at ' . now('America/Sao_Paulo')->format('H:i') . " by user:  {$order->user->name} with id {$order->user_id} ",
             ]
         )->throw();
 

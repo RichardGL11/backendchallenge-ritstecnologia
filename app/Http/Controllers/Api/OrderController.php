@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Enums\OrderStatus;
+use App\Events\OrderStatusEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateOrderRequest;
 use App\Http\Resources\OrderResource;
+use App\Jobs\NotifyTelegram;
 use App\Models\Order;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
@@ -33,7 +35,10 @@ class OrderController extends Controller
            'status'      => $request->enum('status', OrderStatus::class),
         ]);
 
-       return response()->setStatusCode(Response::HTTP_CREATED);
+       OrderStatusEvent::dispatch($order);
+       NotifyTelegram::dispatch($order);
+
+       return response(new OrderResource($order), 201);
     }
 
     /**
