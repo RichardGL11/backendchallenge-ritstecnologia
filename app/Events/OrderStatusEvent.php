@@ -28,9 +28,10 @@ class OrderStatusEvent implements ShouldBroadcast
      */
     public function broadcastOn(): Channel|array
     {
-         return ['Order'];
+        return new Channel('Order') ;
+
     }
-    public function broadcastAs():string
+    public function broadcastAs()
     {
         return 'OrderStatusEvent';
     }
