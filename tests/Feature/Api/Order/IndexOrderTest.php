@@ -2,11 +2,13 @@
 
 use App\Enums\OrderStatus;
 use App\Models\Order;
+use Laravel\Sanctum\Sanctum;
+use function Pest\Laravel\actingAs;
 use function Pest\Laravel\getJson;
 
 it('should see all the resources',function (){
 
-
+    Sanctum::actingAs(\App\Models\User::factory()->create());
     $orders = Order::factory(4)->create([
         'user_id' => 1,
         'product_id' => 1,

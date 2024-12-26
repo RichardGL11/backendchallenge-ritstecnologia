@@ -4,12 +4,14 @@ use App\Enums\OrderStatus;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
+use Laravel\Sanctum\Sanctum;
 use function Pest\Laravel\getJson;
 
 it('should be able to see an specific order', function (){
     $user = User::factory()->create([
         'phone' => '1111111111'
     ]);
+    Sanctum::actingAs($user);
     $product = Product::factory()->create();
 
     $order = Order::factory()->create([

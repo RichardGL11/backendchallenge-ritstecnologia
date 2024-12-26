@@ -21,6 +21,6 @@ it('should see all users', function () {
             $livewire->assertSee($user->name);
             $livewire->assertSee($user->email);
             $livewire->assertSee($user->phone);
-            $livewire->assertSee($user->created_at);
+            $livewire->assertSee($user->created_at->format('d/m/y'));
         });
 });

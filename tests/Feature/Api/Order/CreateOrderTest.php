@@ -4,17 +4,24 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
 use App\Enums\OrderStatus;
+use Illuminate\Support\Facades\Event;
+use Laravel\Sanctum\Sanctum;
+use function Pest\Laravel\actingAs;
 use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\postJson;
 use function Pest\Laravel\withoutExceptionHandling;
-
+beforeEach(function () {
+});
 it('should be able to create an order',function (){
+    Event::fake();
+
     withoutExceptionHandling();
     $user = User::factory()->create([
        'phone' => '1111111111'
     ]);
     $product = Product::factory()->create();
+    Sanctum::actingAs($user);
 
    $request =  postJson(route('order.store'),[
         'user_id'    => $user->id,
@@ -36,9 +43,16 @@ it('should be able to create an order',function (){
 
 describe('validation tests', function (){
 
+    beforeEach(function (){
+       $this->user = User::factory()->create();
+       actingAs($this->user);
+       Event::fake();
+       \Illuminate\Support\Facades\Queue::fake();
+    });
     test('user_id::validations',function ($rule, $value) {
 
         $product = Product::factory()->create();
+
 
         $request =  postJson(route('order.store'),[
             'user_id'    => $value,
