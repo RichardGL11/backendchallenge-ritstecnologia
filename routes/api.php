@@ -15,7 +15,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/orders/{order}', [OrderController::class,'show'])->name('order.show');
     Route::get('/orders', [OrderController::class,'index'])->name('order.index');
     Route::delete('/orders/{order}', [OrderController::class,'destroy'])->name('order.destroy');
-    Route::post('login',[LoginController::class,'login'])->name('login');
+
 });
 
     Route::post('createUser',[CreateUserController::class,'store'])->name('createUser');
+    Route::post('login',[LoginController::class,'login'])->name('login');

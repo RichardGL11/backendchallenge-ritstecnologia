@@ -30,7 +30,7 @@ class OrderController extends Controller
     public function store(CreateOrderRequest $request):Response
     {
        $order = Order::query()->create([
-           'user_id'     => $request->validated('user_id'),
+           'user_id'     => auth()->user()->id,
            'product_id' => $request->validated('product_id'),
            'status'      => $request->enum('status', OrderStatus::class),
         ]);

@@ -5,6 +5,7 @@ use App\Models\Product;
 use App\Models\User;
 use App\Enums\OrderStatus;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Queue;
 use Laravel\Sanctum\Sanctum;
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\assertDatabaseCount;
@@ -47,29 +48,9 @@ describe('validation tests', function (){
        $this->user = User::factory()->create();
        actingAs($this->user);
        Event::fake();
-       \Illuminate\Support\Facades\Queue::fake();
+       Queue::fake();
     });
-    test('user_id::validations',function ($rule, $value) {
 
-        $product = Product::factory()->create();
-
-
-        $request =  postJson(route('order.store'),[
-            'user_id'    => $value,
-            'product_id' => $product->id,
-            'status'     => OrderStatus::Pendente->value,
-
-        ]);
-
-        $request->assertJsonValidationErrors(['user_id' => $rule]);
-
-
-
-
-    })->with([
-        'required' => ['The user id field is required',''],
-        'exits' =>    ['The selected user id is invalid.', 2]
-    ]);
 
     test('product_id::validations',function ($rule, $value) {
 
@@ -78,7 +59,6 @@ describe('validation tests', function (){
         ]);
 
         $request =  postJson(route('order.store'),[
-            'user_id'    => $user->id,
             'product_id' => $value,
             'status'     => OrderStatus::Pendente->value,
 
@@ -95,14 +75,10 @@ describe('validation tests', function (){
     ]);
     test('status::validations',function ($rule, $value) {
 
-        $user = User::factory()->create([
-            'phone' => '1111111111'
-        ]);
         $product = Product::factory()->create();
 
 
         $request =  postJson(route('order.store'),[
-            'user_id'    => $user->id,
             'product_id' => $product->id,
             'status'     => $value,
 

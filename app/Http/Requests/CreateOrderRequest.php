@@ -24,7 +24,6 @@ class CreateOrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => 'required|integer|exists:App\Models\User,id',
             'product_id' => 'required|integer|exists:App\Models\Product,id',
             'status' => ['required',\Illuminate\Validation\Rule::enum(OrderStatus::class)]
         ];
